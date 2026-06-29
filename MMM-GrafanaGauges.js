@@ -8,7 +8,8 @@ Module.register("MMM-GrafanaGauges", {
         https: false,
         version: 0,
         hideLogo: true,
-        spacing: "0"
+        spacing: "0",
+        align: "left"
     },
 
     // Define start sequence.
@@ -49,8 +50,10 @@ Module.register("MMM-GrafanaGauges", {
             Log.warn("MMM-GrafanaGauges: config.showIDs is empty or missing");
         }
 
+        var alignMap = { left: "flex-start", center: "center", right: "flex-end" };
         wrapper.style.display = "flex";
         wrapper.style.flexWrap = "wrap";
+        wrapper.style.justifyContent = alignMap[this.config.align] || "flex-start";
         wrapper.style.gap = this.config.spacing;
         wrapper.innerHTML = img;
         wrapper.setAttribute("timestamp", new Date().getTime());

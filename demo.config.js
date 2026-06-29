@@ -25,6 +25,7 @@ let config = {
         refreshInterval: 60,
         hideLogo: true,
         spacing: '10px',
+        align: 'center',
       },
     },
   ],
