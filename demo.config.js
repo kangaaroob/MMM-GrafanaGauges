@@ -23,6 +23,8 @@ let config = {
         width: '220',
         height: '220',
         refreshInterval: 60,
+        hideLogo: true,
+        spacing: '10px',
       },
     },
   ],

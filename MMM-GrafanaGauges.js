@@ -6,7 +6,9 @@ Module.register("MMM-GrafanaGauges", {
         refreshInterval: 900,
         animationSpeed: 1000,
         https: false,
-        version: 0
+        version: 0,
+        hideLogo: true,
+        spacing: "0"
     },
 
     // Define start sequence.
@@ -37,15 +39,19 @@ Module.register("MMM-GrafanaGauges", {
             baseUrl = protocol + this.config.host + ":" + this.config.port + "/dashboard-solo/db/" + this.config.dashboardname + "?orgId=" + this.config.orgId;
         }
 
+        var hideLogo = this.config.hideLogo ? '&hideLogo=true' : '';
         var img = '';
         if (Array.isArray(this.config.showIDs) && this.config.showIDs.length > 0) {
             for (var i = 0; i < this.config.showIDs.length; i++) {
-                img += '<iframe src="' + baseUrl + '&panelId=' + this.config.showIDs[i] + '" width="' + this.config.width + '" height="' + this.config.height + '" frameborder="0" scrolling="no"></iframe>';
+                img += '<iframe src="' + baseUrl + '&panelId=' + this.config.showIDs[i] + hideLogo + '" width="' + this.config.width + '" height="' + this.config.height + '" frameborder="0" scrolling="no"></iframe>';
             }
         } else {
             Log.warn("MMM-GrafanaGauges: config.showIDs is empty or missing");
         }
 
+        wrapper.style.display = "flex";
+        wrapper.style.flexWrap = "wrap";
+        wrapper.style.gap = this.config.spacing;
         wrapper.innerHTML = img;
         wrapper.setAttribute("timestamp", new Date().getTime());
         return wrapper;
