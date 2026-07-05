@@ -18,9 +18,15 @@ Module.register("MMM-GrafanaGauges", {
         this.scheduleUpdate(this.config.refreshInterval);
     },
 
+	// Define required CSS files.
+	getStyles() {
+		return ['MMM-GrafanaGauges.css']
+	},
+
     // Override dom generator.
     getDom: function() {
         var wrapper = document.createElement("div");
+        wrapper.className = "mmm-grafana-gauges";
         if (!this.config.host) {
             Log.error("MMM-GrafanaGauges: config.host is required");
             return wrapper;
@@ -40,7 +46,7 @@ Module.register("MMM-GrafanaGauges", {
             baseUrl = protocol + this.config.host + ":" + this.config.port + "/dashboard-solo/db/" + this.config.dashboardname + "?orgId=" + this.config.orgId;
         }
 
-        var hideLogo = this.config.hideLogo ? '&hideLogo=true' : '';
+        var hideLogo = this.config.hideLogo ? "&hideLogo=true" : "";
         var img = '';
         if (Array.isArray(this.config.showIDs) && this.config.showIDs.length > 0) {
             for (var i = 0; i < this.config.showIDs.length; i++) {
@@ -50,11 +56,14 @@ Module.register("MMM-GrafanaGauges", {
             Log.warn("MMM-GrafanaGauges: config.showIDs is empty or missing");
         }
 
-        var alignMap = { left: "flex-start", center: "center", right: "flex-end" };
-        wrapper.style.display = "flex";
-        wrapper.style.flexWrap = "wrap";
-        wrapper.style.justifyContent = alignMap[this.config.align] || "flex-start";
-        wrapper.style.gap = this.config.spacing;
+        var align = this.config.align || "left";
+        if (align !== "left" && align !== "center" && align !== "right") {
+            Log.warn("MMM-GrafanaGauges: invalid config.align value '" + align + "'. Allowed values: left, center, right. Falling back to left.");
+            align = "left";
+        }
+
+        wrapper.classList.add("mmm-grafana-gauges--align-" + align);
+        wrapper.style.setProperty("--mmm-grafana-gauges-gap", this.config.spacing || "0");
         wrapper.innerHTML = img;
         wrapper.setAttribute("timestamp", new Date().getTime());
         return wrapper;
